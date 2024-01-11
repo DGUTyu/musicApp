@@ -32,4 +32,6 @@ dependencies {
     compileOnly rootProject.depsLibs.recyclerview
     //可以用arouter去掉此依赖
     compileOnly project(':lib_image_loader')
+    //api rootProject.depsLibs["magicindicator"]
+    api rootProject.depsLibs.magicindicator
 }
