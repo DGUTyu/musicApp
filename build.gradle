@@ -4,6 +4,24 @@ buildscript {
     repositories {
         google()
         jcenter()
+        //构建引入库
+        mavenCentral()
+        maven{
+            url 'http://localhost:8081/repository/imooc-release/'
+            //设置用户密码
+            credentials {
+                username 'admin'
+                password 'luyao456'
+            }
+        }
+        maven{
+            url 'http://localhost:8081/repository/imooc-snapshots/'
+            //设置用户密码
+            credentials {
+                username 'admin'
+                password 'luyao456'
+            }
+        }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.3"
@@ -17,6 +35,24 @@ allprojects {
     repositories {
         google()
         jcenter()
+        //工程引入库
+        mavenCentral()
+        maven{
+            url 'http://localhost:8081/repository/imooc-release/'
+            //设置用户密码
+            credentials {
+                username 'admin'
+                password 'luyao456'
+            }
+        }
+        maven{
+            url 'http://localhost:8081/repository/imooc-snapshots/'
+            //设置用户密码
+            credentials {
+                username 'admin'
+                password 'luyao456'
+            }
+        }
     }
 }
 
