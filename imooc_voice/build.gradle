@@ -16,9 +16,39 @@ android {
 
     }
 
+    //签名设置
+    def alias = "commonui"
+    def keyPW = "android"
+    def filePath = "../app/src/main/jks/commonui.jks"
+    def storePW = "wxdgut.com"
+    signingConfigs {
+        debug {
+            keyAlias 'commonui'
+            keyPassword 'android'
+            storeFile file('/src/main/jks/commonui.jks')
+            storePassword 'wxdgut.com'
+        }
+        release {
+            keyAlias alias
+            keyPassword keyPW
+            storeFile file(filePath)
+            storePassword(storePW)
+            v2SigningEnabled false
+        }
+    }
+
     buildTypes {
+        debug {
+            minifyEnabled false
+            //签名
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        
         release {
             minifyEnabled false
+            //签名
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
