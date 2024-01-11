@@ -1,2 +1,11 @@
-include ':app'
+include ':lib_webview'
+include ':lib_update'
+include ':lib_share'
+include ':lib_qrcode'
+include ':lib_network'
+include ':lib_image_loader'
+include ':lib_commin_ui'
+include ':lib_video'
+include ':lib_audio'
+include ':imooc_voice'
 rootProject.name = "MusicApp"
