@@ -18,12 +18,13 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
+import cn.rxjava.lib_commin_ui.base.BaseActivity;
 import cn.rxjava.lib_commin_ui.pager_indictor.ScaleTransitionPagerTitleView;
 import cn.rxjava.musicapp.R;
 import cn.rxjava.musicapp.imooc_voice.model.CHANNEL;
 import cn.rxjava.musicapp.imooc_voice.view.home.adpater.HomePagerAdapter;
 
-public class HomeActivity extends FragmentActivity implements View.OnClickListener {
+public class HomeActivity extends BaseActivity implements View.OnClickListener {
     /**
      * 指定首页要出现的卡片
      */
