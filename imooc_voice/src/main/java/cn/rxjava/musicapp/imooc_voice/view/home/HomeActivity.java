@@ -1,13 +1,13 @@
 package cn.rxjava.musicapp.imooc_voice.view.home;
 
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -20,7 +20,9 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.Simple
 
 import cn.rxjava.lib_commin_ui.base.BaseActivity;
 import cn.rxjava.lib_commin_ui.pager_indictor.ScaleTransitionPagerTitleView;
+import cn.rxjava.lib_network.okhttp.listener.DisposeDataListener;
 import cn.rxjava.musicapp.R;
+import cn.rxjava.musicapp.imooc_voice.api.RequestCenter;
 import cn.rxjava.musicapp.imooc_voice.model.CHANNEL;
 import cn.rxjava.musicapp.imooc_voice.view.home.adpater.HomePagerAdapter;
 
@@ -104,6 +106,35 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.search_view:
+                RequestCenter.testGetWithP(new DisposeDataListener() {
+                    @Override
+                    public void onSuccess(Object responseObj) {
+                        Log.e("TAG", "onSuccess: ");
+                    }
 
+                    @Override
+                    public void onFailure(Object reasonObj) {
+                        Log.e("TAG", "onFailure: ");
+                    }
+                });
+
+
+                RequestCenter.login(new DisposeDataListener() {
+                    @Override
+                    public void onSuccess(Object responseObj) {
+                        //{"data":null,"errorCode":-1,"errorMsg":"用户名已经被注册！"}
+                        //{"data":null,"errorCode":-1,"errorMsg":"两次输入的密码不一致！"}
+                        Log.e("TAG", "onSuccess: ");
+                    }
+
+                    @Override
+                    public void onFailure(Object reasonObj) {
+                        Log.e("TAG", "onFailure: ");
+                    }
+                });
+                break;
+        }
     }
 }
