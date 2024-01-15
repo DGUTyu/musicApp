@@ -16,7 +16,7 @@ public class RequestCenter {
      * 常量内部类，存放请求地址
      */
     static class HttpConstants {
-        private static final String ROOT_URL = "http://localhost:8000/api";
+        private static final String ROOT_URL = "http://imooc.com/api";
 //        private static final String ROOT_URL = "http://39.97.122.129";
 
         /**
