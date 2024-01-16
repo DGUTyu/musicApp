@@ -20,6 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".imooc_voice.view.login.LoginActivity" />
     </application>
 
 </manifest>

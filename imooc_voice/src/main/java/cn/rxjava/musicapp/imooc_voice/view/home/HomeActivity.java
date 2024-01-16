@@ -8,7 +8,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -18,13 +20,21 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import cn.rxjava.lib_commin_ui.base.BaseActivity;
 import cn.rxjava.lib_commin_ui.pager_indictor.ScaleTransitionPagerTitleView;
+import cn.rxjava.lib_image_loader.app.ImageLoaderManager;
 import cn.rxjava.lib_network.okhttp.listener.DisposeDataListener;
 import cn.rxjava.musicapp.R;
 import cn.rxjava.musicapp.imooc_voice.api.RequestCenter;
 import cn.rxjava.musicapp.imooc_voice.model.CHANNEL;
+import cn.rxjava.musicapp.imooc_voice.model.login.LoginEvent;
+import cn.rxjava.musicapp.imooc_voice.utils.UserManager;
 import cn.rxjava.musicapp.imooc_voice.view.home.adpater.HomePagerAdapter;
+import cn.rxjava.musicapp.imooc_voice.view.login.LoginActivity;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
     /**
@@ -39,9 +49,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private ViewPager mViewPager;
     private HomePagerAdapter mAdapter;
 
+    private View unLogginLayout;
+    private ImageView mPhotoView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_main);
         initView();
         initData();
@@ -58,6 +72,11 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         mAdapter = new HomePagerAdapter(getSupportFragmentManager(), CHANNELS);
         mViewPager.setAdapter(mAdapter);
         initMagicIndicator();
+
+        unLogginLayout = findViewById(R.id.unloggin_layout);
+        unLogginLayout.setOnClickListener(this);
+        mPhotoView = findViewById(R.id.avatr_view);
+        findViewById(R.id.exit_layout).setOnClickListener(this);
     }
 
     private void initData() {
@@ -107,34 +126,40 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.search_view:
-                RequestCenter.testGetWithP(new DisposeDataListener() {
-                    @Override
-                    public void onSuccess(Object responseObj) {
-                        Log.e("TAG", "onSuccess: ");
-                    }
-
-                    @Override
-                    public void onFailure(Object reasonObj) {
-                        Log.e("TAG", "onFailure: ");
-                    }
-                });
-
-
-                RequestCenter.login(new DisposeDataListener() {
-                    @Override
-                    public void onSuccess(Object responseObj) {
-                        //{"data":null,"errorCode":-1,"errorMsg":"用户名已经被注册！"}
-                        //{"data":null,"errorCode":-1,"errorMsg":"两次输入的密码不一致！"}
-                        Log.e("TAG", "onSuccess: ");
-                    }
-
-                    @Override
-                    public void onFailure(Object reasonObj) {
-                        Log.e("TAG", "onFailure: ");
-                    }
-                });
+            case R.id.exit_layout:
+                finish();
+                System.exit(0);
+                break;
+            case R.id.toggle_view:
+                if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                } else {
+                    mDrawerLayout.openDrawer(Gravity.LEFT);
+                }
+                break;
+            case R.id.unloggin_layout:
+                if (!UserManager.getInstance().hasLogined()) {
+                    LoginActivity.start(this);
+                } else {
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                }
+                break;
+            default:
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoginEvent(LoginEvent loginEvent) {
+        unLogginLayout.setVisibility(View.GONE);
+        mPhotoView.setVisibility(View.VISIBLE);
+        String photoUrl = UserManager.getInstance().getUser().data.photoUrl;
+        ImageLoaderManager.getInstance().displayImageForCircle(mPhotoView, photoUrl);
     }
 }
